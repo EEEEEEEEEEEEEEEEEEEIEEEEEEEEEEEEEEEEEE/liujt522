@@ -16,9 +16,6 @@ public class AccountController {
         ApplicationContext app = new ClassPathXmlApplicationContext("applicationContext1.xml");
         AccountService accountService = app.getBean(AccountService.class);
         accountService.transfer("zhangsan","lisi",500);
-
-        int i= 10;
-        i+=10;
     }
 
 }
