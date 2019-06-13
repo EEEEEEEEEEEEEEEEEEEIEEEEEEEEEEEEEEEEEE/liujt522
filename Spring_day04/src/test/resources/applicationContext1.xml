@@ -1,0 +1,62 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--组件扫描-->
+    <context:component-scan base-package="com.itheima"></context:component-scan>
+
+    <!--引入外部文件-->
+    <context:property-placeholder location="jdbc.properties"></context:property-placeholder>
+
+    <bean id="dateSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"></property>
+        <property name="jdbcUrl" value="${jdbc.url}"></property>
+        <property name="user" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dateSource"></property>
+    </bean>
+
+    <!--配置平台事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dateSource"></property>
+    </bean>
+
+
+    <!--事务的注解驱动-->
+    <tx:annotation-driven/>
+
+
+
+
+
+<!--
+
+    <bean id="accountDao" class="com.itheima.dao.impl.AccountDaoImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    &lt;!&ndash;目标对象&ndash;&gt;
+    <bean id="accountService" class="com.itheima.service.impl.AccountServiceImpl">
+        <property name="accountDao" ref="accountDao"></property>
+    </bean>
+
+    &lt;!&ndash;通知，事务增强&ndash;&gt;
+    <tx:advice id="txadvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+    &lt;!&ndash;织入&ndash;&gt;
+    <aop:config>
+        <aop:advisor advice-ref="txadvice" pointcut="execution(* com.itheima.service.impl.*.*(..))"></aop:advisor>
+    </aop:config>-->
+
+</beans>
